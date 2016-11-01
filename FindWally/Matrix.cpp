@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include <iostream>
 
 Matrix::Matrix() : Matrix(1, 1) {}
 
@@ -28,7 +29,7 @@ int Matrix::getVal(int x, int y)
 
 void Matrix::printMatrix()
 {
-
+	std::cout << "matrix :D";
 }
 
 Matrix::~Matrix()
