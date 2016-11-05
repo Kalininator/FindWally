@@ -3,42 +3,57 @@
 #include <string>
 #include <fstream>
 
-#include "Matrix.h"
+#include "Image.h"
+#include "MatchImage.h"
+#include "LargeImage.h"
 
 using namespace std;
 
-Matrix* getMatrixFromFile(string filename)
+double* getArrayFromFile(string filename, int width, int height)
 {
-	ifstream file;
-	file.open(filename, ios::in);
+	double* data = new double[width*height];
 
-	int width,height;
+	int i = 0;
 
-	string line;
-	//get first line with dimensions
-	getline(file,line);
-	istringstream str (line);
+	ifstream file(filename);
 
-	getline(str,line,' ');
-	width = stoi(line);
-	getline(str,line,' ');
-	height = stoi(line);
-
-	Matrix* matrix = new Matrix(width,height);
-	int county = 0;
-	while(getline(file,line))
+	if (file.is_open())
 	{
-		istringstream stream (line);
-		int countx= 0;
-		string val;
-		while(getline(stream,val,' '))
+		while (file.good())
 		{
-			(*matrix).setVal(countx,county,stoi(val));
-			countx ++;
+			if (i >= width*height)
+				break;
+			file >> *(data + i);
+			//cout << *(data + i);
+			i++;
 		}
-		county ++;
+		file.close();
+	}
+	else {
+		cout << "error code ID10T";
 	}
 
+	return data;
+}
+Matrix* getMatrixFromFile(string filename, int width, int height)
+{
+	Matrix* matrix = new Matrix(width,height);
+
+	int i = 0;
+
+	ifstream file(filename);
+
+	while (file.good())
+	{
+		if (i >= width * height)
+			break;
+
+		double d;
+		file >> d;
+
+		(*matrix).setVal(i%width, i / width, (int)d);
+		i++;
+	}
 	file.close();
 
 	return matrix;
@@ -46,11 +61,47 @@ Matrix* getMatrixFromFile(string filename)
 
 int main()
 {
-	Matrix* matrix = getMatrixFromFile("sample.txt");
+	//1024,768
+	//wally: 36,49
 
-	matrix -> printMatrix();
+	/*double* input_data = 0;
+	input_data = getArrayFromFile("Cluttered_scene.txt",1024,768);
+	cout << *(input_data);
+	delete[] input_data;*/
 
-	delete matrix;
+	//Matrix* matrix = getMatrixFromFile("Cluttered_scene.txt",1024,768);
 	
+
+	//delete(matrix);
+
+	Image* wally = new Image(36,49,"Wally_grey.txt");
+	Image* scene = new Image(1024, 768, "Cluttered_scene.txt");
+	//(*wally).printImage();
+
+	//(*wally).generatePGM("wally.pgm");
+
+	//cout << scene->getScore(106,209,wally);
+
+	//int lowestscore = 10000000;
+
+	/*for (int n = 0; n < scene->width - wally->width; n++)
+	{
+		for (int m = 0; m < scene->height - wally->height; m++)
+		{
+			int score;
+			score = scene->getScore(n,m,wally);
+			if (score < lowestscore)
+			{
+				lowestscore = score;
+				cout << "x:" << n << ",y:" << m << endl;
+			}
+		}
+	}*/
+
+
+	delete wally;
+	delete scene;
+	system("pause");
+
 	return 0;
 }

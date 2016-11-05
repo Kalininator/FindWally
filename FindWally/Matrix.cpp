@@ -1,25 +1,52 @@
 #include "Matrix.h"
 #include <iostream>
+#include <string>
+#include <fstream>
+
 
 Matrix::Matrix() : Matrix(1, 1) {}
 
 Matrix::Matrix(int xval, int yval)
 {
-	x = xval;
-	y = yval;
+	width = xval;
+	height = yval;
 	allocArray();
-	for (int i = 0; i < x; i++)
+	for (int i = 0; i < width; i++)
 	{
-		for (int j = 0; j < y; j++)
+		for (int j = 0; j < height; j++)
 		{
 			p[i][j] = 0;
 		}
 	}
 }
 
-void Matrix::setVal(int x, int y, int val)
+void Matrix::fillFromFile(std::string filename)
 {
-	p[x][y] = val;
+	int i = 0;
+
+	std::ifstream file(filename);
+
+	while (file.good())
+	{
+		if (i >= width * height)
+			break;
+
+		double d;
+		file >> d;
+
+		setVal(i%width, i / width, (int)d);
+		i++;
+	}
+	file.close();
+}
+
+void Matrix::setVal(int xpos, int ypos, int val)
+{
+	if (xpos >= width || ypos >= height)
+		return;
+
+	p[xpos][ypos] = val;
+	
 }
 
 int Matrix::getVal(int x, int y)
@@ -29,12 +56,23 @@ int Matrix::getVal(int x, int y)
 
 void Matrix::printMatrix()
 {
-	std::cout << "matrix :D";
+	
+
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			std::cout << getVal(i, j);
+			std::cout << ",";
+		}
+		std::cout << std::endl;
+	}
+
 }
 
 Matrix::~Matrix()
 {
-	for (int i = 0; i < x; i++)
+	for (int i = 0; i < width; i++)
 	{
 		delete[] p[i];
 	}
