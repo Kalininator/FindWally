@@ -74,7 +74,8 @@ int Image::getScore(int x, int y, Image * match)
 		for (int j = y; j < y + match->height; j++)
 		{
 			//for each pixel in image
-			score += (abs(nearestNeighbourAverage(i + x,j + y, 1) - match->getPixel(i-x,j-y)));
+			float sc = ((nearestNeighbourAverage(i + x,j + y, 1) - match->getPixel(i-x,j-y)));
+			score += sc * sc;
 
 		}
 	}

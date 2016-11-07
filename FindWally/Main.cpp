@@ -82,9 +82,9 @@ int main()
 
 	//cout << scene->getScore(106,209,wally);
 
-	//int lowestscore = 10000000;
+	int lowestscore = 10000000;
 
-	/*for (int n = 0; n < scene->width - wally->width; n++)
+	for (int n = 0; n < scene->width - wally->width; n++)
 	{
 		for (int m = 0; m < scene->height - wally->height; m++)
 		{
@@ -96,7 +96,8 @@ int main()
 				cout << "x:" << n << ",y:" << m << endl;
 			}
 		}
-	}*/
+	}
+	wally->printImage();
 
 
 	delete wally;
