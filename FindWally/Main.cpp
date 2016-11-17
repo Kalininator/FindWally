@@ -49,34 +49,34 @@ int main()
 	
 	double best = -1;
 	int bestx, besty;
-	//for (int i = 0; i < scene->width - wally->width; i++)
-	//{
-	//	for (int j = 0; j < scene->height - wally->height; j++)
-	//	{
-	//		Image* scenesection = scene->getSection(i,j, 36, 49);
-	//		double sc = getScore(scenesection, wally);
-	//		if (sc > best)
-	//		{
-	//			best = sc;
-	//			bestx = i;
-	//			besty = j;
-	//			std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
-	//		}
-	//		//scenesection->printMatrix();
-	//		//std::cout << (*wally * *wally)->getTotal();
+	for (int i = 0; i < scene->width - wally->width; i++)
+	{
+		for (int j = 0; j < scene->height - wally->height; j++)
+		{
+			Image* scenesection = scene->getSection(i,j, 36, 49);
+			double sc = getScore(scenesection, wally);
+			if (sc > best)
+			{
+				best = sc;
+				bestx = i;
+				besty = j;
+				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
+			}
+			//scenesection->printMatrix();
+			//std::cout << (*wally * *wally)->getTotal();
 
-	//		//scenesection->printMatrix();
+			//scenesection->printMatrix();
 
-	//		delete scenesection;
-	//		
-	//	}
-	//}
+			delete scenesection;
+			
+		}
+	}
 
 	/*Image* foundhim = scene->getSection(162,144, 36, 49);
 	foundhim->generatePGM("foundhim.pgm");
 	delete foundhim;*/
 
-	std::cout << scene->getValue(2000, 2000);
+	//std::cout << scene->getValue(2000, 2000);
 
 	delete scene;
 	delete wally;
