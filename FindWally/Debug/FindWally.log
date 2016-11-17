@@ -1,0 +1,9 @@
+﻿  Main.cpp
+d:\documents\github\findwally\findwally\main.cpp(10): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(11): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(13): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(15): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(51): warning C4101: 'besty': unreferenced local variable
+d:\documents\github\findwally\findwally\main.cpp(51): warning C4101: 'bestx': unreferenced local variable
+  FindWally.vcxproj -> D:\Documents\GitHub\FindWally\Debug\FindWally.exe
+  FindWally.vcxproj -> D:\Documents\GitHub\FindWally\Debug\FindWally.pdb (Partial PDB)
