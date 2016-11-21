@@ -93,6 +93,7 @@ Image * Image::operator*(Image & image)
 	}
 
 	Image* m = new Image(this->width, this->height);
+
 	for (int i = 0; i < this->width; i++)
 	{
 		for (int j = 0; j < this->height; j++)
