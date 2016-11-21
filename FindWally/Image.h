@@ -18,7 +18,7 @@ public:
 	void printMatrix();
 	void generatePGM(std::string filename);
 	void fillFromFile(std::string filename);
-
+    //LOL
 	int width, height;
 	~Image();
 private:
