@@ -5,6 +5,23 @@
 #include <vector>
 #include <mutex>
 
+double getScoreSquaredDifference(Image* scene, Image* sample)
+{
+	double score = 0;
+
+	for (int i = 0; i < sample->width; i++)
+	{
+		for (int j = 0; j < sample->height; j++)
+		{
+			double sc = abs(scene->getValue(i,j) - sample->getValue(i,j));
+			score += sc;
+		}
+	}
+
+	return score;
+}
+
+
 double getScore(Image* scene, Image* sample, float mean_sample)
 {
 	double score;
@@ -72,6 +89,40 @@ void findBest(Image* scene, Image* wally) //395798
 	std::cout << "best match can be found in result.pgm";
 }
 
+void findBestSquaredDifference(Image* scene, Image* wally)
+{
+	clock_t startTime = clock();
+	double best = 10000000000;
+	int bestx = 0;
+	int besty = 0;
+	//float mean_sample = wally->getTotal() / (wally->width * wally->height);
+#pragma omp parallel for //96 seconds with
+	for (int i = 0; i < scene->width - wally->width; i++)
+	{
+		for (int j = 0; j < scene->height - wally->height; j++)
+		{
+			Image* scenesection = scene->getSection(i, j, 36, 49);
+			double sc = getScoreSquaredDifference(scenesection, wally);
+			sc = sc * sc;
+			if (sc < best)
+			{
+				best = sc;
+				bestx = i;
+				besty = j;
+				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
+			}
+			delete scenesection;
+		}
+	}
+	std::cout << "Time Taken: " << float(clock() - startTime) / 1000;
+
+	Image* result = scene->getSection(bestx, besty, wally->width, wally->height);
+	result->generatePGM("result.pgm");
+	delete result;
+
+	std::cout << "best match can be found in result.pgm";
+}
+
 
 
 int main()
@@ -85,6 +136,7 @@ int main()
 	wally->fillFromFile("Wally_grey.txt");
 
 	findBest(scene, wally);
+	//findBestSquaredDifference(scene, wally);
 
 
 	delete scene;
