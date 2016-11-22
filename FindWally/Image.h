@@ -8,6 +8,7 @@ class Image
 public:
 	Image();
 	Image(int width, int height);
+	Image(int width, int height, std::string filename);
 	void setValue(int x, int y, int val);
 	int getValue(int x, int y);
 	Image* getSection(int x, int y, int width, int height);

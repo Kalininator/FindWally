@@ -18,6 +18,14 @@ Image::Image(int width, int height)
 	}
 }
 
+Image::Image(int width, int height, std::string filename)
+{
+	this->width = width;
+	this->height = height;
+	allocArray();
+	fillFromFile(filename);
+}
+
 void Image::setValue(int x, int y, int val)
 {
 	if (x >= width || y >= height)
