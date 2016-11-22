@@ -78,6 +78,27 @@ Image* Image::operator+(Image & image)
 	return m;
 }
 
+
+Image* Image::operator-(Image & image)
+{
+	Image* m = new Image(this->width,this->height);
+	if (image.width != this->width || image.height != this->height)//sizes are different, so return empty matrix
+	{
+		return m;
+	}
+
+	for (int i = 0; i < this->width; i++)
+	{
+		for (int j = 0; j < this->height; j++)
+		{
+			m->setValue(i, j,this->getValue(i,j) - image.getValue(i,j));
+		}
+	}
+
+	return m;
+}
+
+
 Image * Image::operator+(int value)
 {
 	Image* m = new Image(this->width, this->height);
@@ -93,6 +114,20 @@ Image * Image::operator+(int value)
 	return m;
 }
 
+Image * Image::operator-(int value)
+{
+	Image* m = new Image(this->width, this->height);
+
+	for (int i = 0; i < this->width; i++)
+	{
+		for (int j = 0; j < this->height; j++)
+		{
+			m->setValue(i, j, this->getValue(i, j) - value);
+		}
+	}
+
+	return m;
+}
 Image * Image::operator*(Image & image)
 {
 	if (image.width != this->width || image.height != this->height)//sizes are different, so return nullptr

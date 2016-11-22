@@ -13,7 +13,9 @@ public:
 	int getValue(int x, int y);
 	Image* getSection(int x, int y, int width, int height);
 	Image* operator+(Image& image);
+	Image* operator-(Image& image);
 	Image* operator+(int value);
+	Image* operator-(int value);
 	Image* operator*(Image& image);
 	long getTotal();
 	void printMatrix();

@@ -8,7 +8,7 @@
 double getScoreSquaredDifference(Image* scene, Image* sample)
 {
 	double score = 0;
-
+	
 	for (int i = 0; i < sample->width; i++)
 	{
 		for (int j = 0; j < sample->height; j++)
@@ -28,9 +28,9 @@ double getScore(Image* scene, Image* sample, float mean_sample)
 	//calc mean of scene and sample
 	float mean_scene = scene->getTotal() / (scene->width * scene->height);
 
-	Image* I = *scene + -mean_scene;
+	Image* I = *scene - mean_scene;
 	//std::cout << scene->getTotal() << std::endl << scene->width << std::endl<< scene->height;
-	Image* T = *sample + -mean_sample;
+	Image* T = *sample - mean_sample;
 
 	Image* IT = *I * *T;
 	Image* II = *I * *I;
