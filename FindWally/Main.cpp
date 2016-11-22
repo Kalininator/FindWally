@@ -125,8 +125,20 @@ void findBestSquaredDifference(Image* scene, Image* wally)
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
+	bool squaredDifference = false;
+	
+
+	if (argc > 1)//get any command-line arguments
+	{
+		for (int i = 1; i < argc; i++)
+		{
+			if (argv[i] == "-s") //squared difference mode
+				squaredDifference = true;
+		}
+	}
+
 	//1024,768
 	//36,49
 
@@ -135,8 +147,12 @@ int main()
 	scene->fillFromFile("Cluttered_scene.txt");
 	wally->fillFromFile("Wally_grey.txt");
 
-	findBest(scene, wally);
-	//findBestSquaredDifference(scene, wally);
+	if(squaredDifference)
+		findBestSquaredDifference(scene, wally);
+	else
+		findBest(scene, wally);
+	
+	
 
 
 	delete scene;

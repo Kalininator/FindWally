@@ -1,7 +1,7 @@
 ﻿  Main.cpp
-d:\documents\github\findwally\findwally\main.cpp(12): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
-d:\documents\github\findwally\findwally\main.cpp(14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\documents\github\findwally\findwally\main.cpp(16): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\documents\github\findwally\findwally\main.cpp(48): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(29): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(65): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Debug\FindWally.exe
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Debug\FindWally.pdb (Partial PDB)
