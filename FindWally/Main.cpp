@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 #include <mutex>
-
+#include <cstring>
 double getScoreSquaredDifference(Image* scene, Image* sample)
 {
 	double score = 0;
@@ -80,7 +80,7 @@ void findBest(Image* scene, Image* wally) //395798
 			delete scenesection;
 		}
 	}
-	std::cout << "Time Taken: " << float(clock() - startTime)/1000;
+	std::cout << "Time Taken: " << float(clock() - startTime)/(double)CLOCKS_PER_SEC;
 
 	Image* result = scene->getSection(bestx,besty,wally->width,wally->height);
 	result->generatePGM("result.pgm");
@@ -114,7 +114,7 @@ void findBestSquaredDifference(Image* scene, Image* wally)
 			delete scenesection;
 		}
 	}
-	std::cout << "Time Taken: " << float(clock() - startTime) / 1000;
+	std::cout << "Time Taken: " << float(clock() - startTime) / (double) CLOCKS_PER_SEC;
 
 	Image* result = scene->getSection(bestx, besty, wally->width, wally->height);
 	result->generatePGM("result.pgm");
@@ -130,13 +130,10 @@ int main(int argc, char* argv[])
 	bool squaredDifference = false;
 	
 
-	if (argc > 1)//get any command-line arguments
+	if (argc == 2)//get any command-line arguments
 	{
-		for (int i = 1; i < argc; i++)
-		{
-			if (argv[i] == "-s") //squared difference mode
-				squaredDifference = true;
-		}
+		if(std::strcmp(argv[1],"-s")==0)
+			squaredDifference = true;	
 	}
 
 	//1024,768
