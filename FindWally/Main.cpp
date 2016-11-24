@@ -63,6 +63,7 @@ void findBest(Image* scene, Image* wally) //395798
 	int bestx = 0;
 	int besty = 0;
 	float mean_sample = wally->getTotal() / (wally->width * wally->height);
+	std::mutex coutMu;
 	#pragma omp parallel for //96 seconds with
 	for (int i = 0; i < scene->width - wally->width; i++)
 	{
@@ -75,12 +76,13 @@ void findBest(Image* scene, Image* wally) //395798
 				best = sc;
 				bestx = i;
 				besty = j;
+				std::lock_guard<std::mutex> lock(coutMu);
 				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
 			}
 			delete scenesection;
 		}
 	}
-	std::cout << "Time Taken: " << float(clock() - startTime)/(double)CLOCKS_PER_SEC;
+	std::cout << "Time Taken: " << float(clock() - startTime)/(double)CLOCKS_PER_SEC << std::endl;
 
 	Image* result = scene->getSection(bestx,besty,wally->width,wally->height);
 	result->generatePGM("result.pgm");
@@ -96,6 +98,7 @@ void findBestSquaredDifference(Image* scene, Image* wally)
 	int bestx = 0;
 	int besty = 0;
 	//float mean_sample = wally->getTotal() / (wally->width * wally->height);
+	std::mutex coutMu;
 #pragma omp parallel for //96 seconds with
 	for (int i = 0; i < scene->width - wally->width; i++)
 	{
@@ -109,12 +112,13 @@ void findBestSquaredDifference(Image* scene, Image* wally)
 				best = sc;
 				bestx = i;
 				besty = j;
+				std::lock_guard<std::mutex> lock(coutMu);
 				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
 			}
 			delete scenesection;
 		}
 	}
-	std::cout << "Time Taken: " << float(clock() - startTime) / (double) CLOCKS_PER_SEC;
+	std::cout << "Time Taken: " << float(clock() - startTime) / (double) CLOCKS_PER_SEC << std::endl;
 
 	Image* result = scene->getSection(bestx, besty, wally->width, wally->height);
 	result->generatePGM("result.pgm");
@@ -123,6 +127,11 @@ void findBestSquaredDifference(Image* scene, Image* wally)
 	std::cout << "best match can be found in result.pgm";
 }
 
+void displayUsageMessage()
+{
+	std::cout << "[-s] -> use sum of squared differences";
+	exit(0);
+}
 
 
 int main(int argc, char* argv[])
@@ -134,6 +143,8 @@ int main(int argc, char* argv[])
 	{
 		if(std::strcmp(argv[1],"-s")==0)
 			squaredDifference = true;	
+		if(std::strcmp(argv[1],"-h")==0)
+			displayUsageMessage();
 	}
 
 	//1024,768
