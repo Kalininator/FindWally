@@ -3,6 +3,7 @@
 #include "Image.h"
 #include <thread>
 #include <vector>
+#include <future>
 #include <mutex>
 #include <cstring>
 double getScoreSquaredDifference(Image* scene, Image* sample)
@@ -56,40 +57,70 @@ double getScore(Image* scene, Image* sample, float mean_sample)
 
 
 
-void findBest(Image* scene, Image* wally) //395798
+//void findBest(Image* scene, Image* wally) //395798
+//{
+//	clock_t startTime = clock();
+//	double best = -1;
+//	int bestx = 0;
+//	int besty = 0;
+//	float mean_sample = wally->getTotal() / (wally->width * wally->height);
+//	std::mutex coutMu;
+//	#pragma omp parallel for //96 seconds with
+//	for (int i = 0; i < scene->width - wally->width; i++)
+//	{
+//		for (int j = 0; j < scene->height - wally->height; j++)
+//		{
+//			Image* scenesection = scene->getSection(i, j, 36, 49);
+//			double sc = getScore(scenesection, wally,mean_sample);
+//			if (sc > best)
+//			{
+//				best = sc;
+//				bestx = i;
+//				besty = j;
+//				std::lock_guard<std::mutex> lock(coutMu);
+//				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
+//			}
+//			delete scenesection;
+//		}
+//	}
+//	std::cout << "Time Taken: " << float(clock() - startTime)/(double)CLOCKS_PER_SEC << std::endl;
+//
+//	Image* result = scene->getSection(bestx,besty,wally->width,wally->height);
+//	result->generatePGM("result.pgm");
+//	delete result;
+//
+//	std::cout << "best match can be found in result.pgm";
+//}
+
+void findBest(Image* scene, Image* wally)
 {
 	clock_t startTime = clock();
 	double best = -1;
-	int bestx = 0;
-	int besty = 0;
 	float mean_sample = wally->getTotal() / (wally->width * wally->height);
-	std::mutex coutMu;
-	#pragma omp parallel for //96 seconds with
 	for (int i = 0; i < scene->width - wally->width; i++)
 	{
+		std::vector<std::future<double>> futures;
+		std::vector<Image*> sections;
 		for (int j = 0; j < scene->height - wally->height; j++)
 		{
-			Image* scenesection = scene->getSection(i, j, 36, 49);
-			double sc = getScore(scenesection, wally,mean_sample);
+			sections.push_back(scene->getSection(i,j,wally->width,wally->height));
+			futures.push_back(std::async(getScore,sections[j],wally,mean_sample));
+		}
+
+		for (int j = 0; j < scene->height - wally->height; j++)
+		{
+			double sc = futures[j].get();
 			if (sc > best)
 			{
 				best = sc;
-				bestx = i;
-				besty = j;
-				std::lock_guard<std::mutex> lock(coutMu);
 				std::cout << "score: " << sc << ",x:" << i << ",y:" << j << std::endl;
 			}
-			delete scenesection;
+			delete sections[j];
 		}
 	}
-	std::cout << "Time Taken: " << float(clock() - startTime)/(double)CLOCKS_PER_SEC << std::endl;
-
-	Image* result = scene->getSection(bestx,besty,wally->width,wally->height);
-	result->generatePGM("result.pgm");
-	delete result;
-
-	std::cout << "best match can be found in result.pgm";
+	std::cout << "Time Taken: " << float(clock() - startTime) / (double)CLOCKS_PER_SEC << std::endl;
 }
+
 
 void findBestSquaredDifference(Image* scene, Image* wally)
 {

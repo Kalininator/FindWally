@@ -25,8 +25,8 @@ public:
 	int width, height;
 	~Image();
 private:
-	
 	int **p;
+protected:
 	void allocArray();
 };
 
