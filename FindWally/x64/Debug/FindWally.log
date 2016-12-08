@@ -1,10 +1,13 @@
-﻿  Main.cpp
-d:\documents\github\findwally\findwally\main.cpp(30): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
-d:\documents\github\findwally\findwally\main.cpp(32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+﻿  MatchImage.cpp
+d:\documents\github\findwally\findwally\matchimage.cpp(58): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+d:\documents\github\findwally\findwally\matchimage.cpp(60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\matchimage.cpp(61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Main.cpp
+d:\documents\github\findwally\findwally\main.cpp(32): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
 d:\documents\github\findwally\findwally\main.cpp(34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\documents\github\findwally\findwally\main.cpp(99): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
-  Image.cpp
+d:\documents\github\findwally\findwally\main.cpp(36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\documents\github\findwally\findwally\main.cpp(108): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+  LargeImage.cpp
   Generating Code...
-  LINK : D:\Documents\GitHub\FindWally\x64\Debug\FindWally.exe not found or not built by the last incremental link; performing full link
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Debug\FindWally.exe
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Debug\FindWally.pdb (Partial PDB)
