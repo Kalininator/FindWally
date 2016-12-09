@@ -15,11 +15,11 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage)
 		
 		for (int i = start; i < end; i++)
 		{
-			int x = i % (image->width - templateImage->width);
+			int x = i % (image->width - templateImage->width);//calc x and y co-ords from index
 			int y = i / (image->width - templateImage->width);
 
 
-			MatchImage* match = new MatchImage(image,x,y,templateImage->width,templateImage->height);
+			MatchImage* match = new MatchImage(image,x,y,templateImage->width,templateImage->height);//create a match image for the location
 
 			match->getScoreNormalisedCorrelation(templateImage);
 
