@@ -1,4 +1,5 @@
 #include "MatchImage.h"
+#include <cmath>
 
 MatchImage::MatchImage(Image * source, int x, int y, int width, int height)
 {
