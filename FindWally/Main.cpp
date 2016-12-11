@@ -210,11 +210,17 @@ int main(int argc, char* argv[])
 	LargeImage * scene = new LargeImage(1024, 768, sceneFile);
 	Image* templateImage = new Image(36, 49, templateFile);
 	clock_t startTime = clock();
-	scene->NNS_NormalisedCorrelation(templateImage);
+
+	/*MatchImage* actual = new MatchImage(scene, 162, 144, templateImage);
+	std::cout << actual->getScoreSquaredDifference();*/
+	scene->NNS_NormalisedCorrelation(templateImage,30);
+	//scene->NNS_SquaredDifference(templateImage,20);
+
+
+
 	std::cout << "Time Taken: " << float(clock() - startTime) / (double)CLOCKS_PER_SEC << std::endl;
 	delete templateImage;
 	delete scene;
-
-	system("pause");
+	std::cin.get();
 	return 0;
 }

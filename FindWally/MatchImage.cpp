@@ -1,11 +1,14 @@
 #include "MatchImage.h"
 #include <cmath>
 
-MatchImage::MatchImage(Image * source, int x, int y, int width, int height)
+MatchImage::MatchImage(Image * source, int x, int y, Image* templateImage)
 {
-	this->width = width;
-	this->height = height;
+	this->width = templateImage->width;
+	this->height = templateImage->height;
+	this->x = x;
+	this->y = y;
 	this->source = source;
+	this->templateImage = templateImage;
 	allocArray();
 
 	for (int i = 0; i < width; i++)
@@ -18,24 +21,33 @@ MatchImage::MatchImage(Image * source, int x, int y, int width, int height)
 
 }
 
-double MatchImage::getScoreSquaredDifference(Image * templateImage)
+double MatchImage::getScoreSquaredDifference()
 {
 	if (scores.find("SquaredDifference") == scores.end())
 	{
 		//if doesn't already have it calculated
 		//calculate sum of squared Differences
+		double total = 0;
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				int difference = getValue(i, j) - templateImage->getValue(i,j);
+				total += difference * difference;
+			}
+		}
 
-
-
+		//divide total by width*height, sicne this will be the same for all match images, the scores will still be usable for comparison
+		//total = total / (width*height);
 		//store it in map
 
-		scores["SquaredDifference"] = 0.0;
+		scores["SquaredDifference"] = total;
 	}
 	//return it, now that it is definitely stored
 	return scores["SquaredDifference"];
 }
 
-double MatchImage::getScoreNormalisedCorrelation(Image * templateImage)
+double MatchImage::getScoreNormalisedCorrelation()
 {
 	//no mean provided for template image
 

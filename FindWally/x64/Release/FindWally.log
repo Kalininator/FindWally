@@ -1,8 +1,12 @@
-﻿  LargeImage.cpp
+﻿  Main.cpp
+Main.cpp(32): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+Main.cpp(34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Main.cpp(36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Main.cpp(108): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
   Generating code
-  14 of 1349 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  164 of 1419 functions (11.6%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    22 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Release\FindWally.exe
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Release\FindWally.pdb (Full PDB)
