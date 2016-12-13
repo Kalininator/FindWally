@@ -9,7 +9,6 @@ public:
 	Image(int width, int height, std::string filename);
 	void setValue(int x, int y, int val);
 	int getValue(int x, int y);
-	Image* getSection(int x, int y, int width, int height);
 	Image* operator-(int value);
 	Image* operator*(Image& image);
 	long getTotal();

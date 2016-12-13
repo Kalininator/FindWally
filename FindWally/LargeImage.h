@@ -12,7 +12,6 @@ public:
 	void NNS_SquaredDifference(Image * templateImage, int keepTop);
 	void addMatchNNS(MatchImage* match, int topnum);
 	void addMatchSSD(MatchImage* match, int topnum);
-	
 	~LargeImage();
 private:
 	std::vector<MatchImage*> matches;

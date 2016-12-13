@@ -8,7 +8,7 @@ public:
 	MatchImage(Image* source, int x, int y, Image* templateImage);
 	double getScoreSquaredDifference();
 	double getScoreNormalisedCorrelation();
-	double getScoreNormalisedCorrelation(Image* templateImage, double templateImageMean);
+	double getScoreNormalisedCorrelation(double templateImageMean);
 	int x, y;
 private:
 	std::map<std::string, double> scores;

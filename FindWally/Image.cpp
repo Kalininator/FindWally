@@ -39,25 +39,6 @@ int Image::getValue(int x, int y)
 	return p[x][y];
 }
 
-Image * Image::getSection(int x, int y, int width, int height)
-{
-	if (x + width >= this->width || y + height >= this->height)
-	{
-		return nullptr;
-	}
-
-	Image* m = new Image(width, height);
-	
-	for (int i = x; i < x + width; i++)
-	{
-		for (int j = y; j < y + height; j++)
-		{
-			
-			m->setValue(i-x,j-y,getValue(i,j));
-		}
-	}
-	return m;
-}
 
 Image * Image::operator-(int value)
 {

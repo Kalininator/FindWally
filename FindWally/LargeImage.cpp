@@ -11,7 +11,7 @@ using namespace std;
 void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 {
 	mutex coutMu;
-	auto worker = [](int start, int end, LargeImage* image, Image* templateImage, mutex& coutMu, int keepTop) {
+	auto worker = [](int start, int end, LargeImage* image, Image* templateImage, mutex& coutMu,double templateImageMean, int keepTop) {
 		
 		for (int i = start; i < end; i++)
 		{
@@ -21,7 +21,7 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 
 			MatchImage* match = new MatchImage(image,x,y,templateImage);//create a match image for the location
 
-			match->getScoreNormalisedCorrelation();
+			match->getScoreNormalisedCorrelation(templateImageMean);
 			lock_guard<mutex> lock(coutMu);
 			image->addMatchNNS(match,keepTop);
 
@@ -31,16 +31,17 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 	int threadCount = thread::hardware_concurrency();
 	//int threadCount = 7;
 	vector<thread> threads(threadCount);
-	const int grainsize = ((width - templateImage->width) * (height - templateImage->height)) / threadCount;//operations given to each thread
-
+	int length = (width - templateImage->width) * (height - templateImage->height);
+	const int grainsize = length / threadCount;//operations given to each thread
+	double templateImageMean = templateImage->getTotal() / (templateImage->width * templateImage->height);
 	int worker_iter = 0;
 
 	for (int i = 0; i < threadCount - 1; i++)//all threads apart from last one
 	{
-		threads[i] = thread(worker,worker_iter,worker_iter + grainsize, this,templateImage, std::ref(coutMu), keepTop);
+		threads[i] = thread(worker,worker_iter,worker_iter + grainsize, this,templateImage, std::ref(coutMu),templateImageMean, keepTop);
 		worker_iter += grainsize;
 	}
-	threads.back() = thread(worker, worker_iter, (width - templateImage->width) * (height - templateImage->height), this,templateImage, std::ref(coutMu),keepTop);//last grainsize section, + any leftovers
+	threads.back() = thread(worker, worker_iter, length, this,templateImage, std::ref(coutMu),templateImageMean,keepTop);//last grainsize section, + any leftovers
 
 	for (auto&& i : threads)
 	{
@@ -52,11 +53,9 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 	//print em
 	for (int i = 0; i < matches.size(); i++)
 	{
-		cout << matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
+		cout << "#" << i << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
 	}
 }
-
-
 
 void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 {
@@ -82,7 +81,8 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 	int threadCount = thread::hardware_concurrency();
 	//int threadCount = 7;
 	vector<thread> threads(threadCount);
-	const int grainsize = ((width - templateImage->width) * (height - templateImage->height)) / threadCount;//operations given to each thread
+	int length = (width - templateImage->width) * (height - templateImage->height);
+	const int grainsize = length / threadCount;//operations given to each thread
 
 	int worker_iter = 0;
 
@@ -91,7 +91,7 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 		threads[i] = thread(worker, worker_iter, worker_iter + grainsize, this, templateImage, std::ref(coutMu), keepTop);
 		worker_iter += grainsize;
 	}
-	threads.back() = thread(worker, worker_iter, (width - templateImage->width) * (height - templateImage->height), this, templateImage, std::ref(coutMu), keepTop);//last grainsize section, + any leftovers
+	threads.back() = thread(worker, worker_iter, length, this, templateImage, std::ref(coutMu), keepTop);//last grainsize section, + any leftovers
 
 	for (auto&& i : threads)
 	{
@@ -102,7 +102,7 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 	//print em
 	for (int i = 0; i < matches.size(); i++)
 	{
-		cout << matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreSquaredDifference() << endl;
+		cout << "#" << i << ":\t"<< matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreSquaredDifference() << endl;
 	}
 }
 

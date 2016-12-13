@@ -54,10 +54,10 @@ double MatchImage::getScoreNormalisedCorrelation()
 	//calc mean
 	double mean = templateImage->getTotal() / (templateImage->width * templateImage->height);
 
-	return getScoreNormalisedCorrelation(templateImage,mean);
+	return getScoreNormalisedCorrelation(mean);
 }
 
-double MatchImage::getScoreNormalisedCorrelation(Image * templateImage, double templateImageMean)
+double MatchImage::getScoreNormalisedCorrelation(double templateImageMean)
 {
 	//mean already provided :) yay less calculation
 
