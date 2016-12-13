@@ -1,8 +1,11 @@
-CC=g++-5 -fopenmp 
+CC=g++ 
 
 CFLAGS=-c -std=c++11
 
 all: wally
+
+run: wally
+	./findwally.out
 
 wally: main.o image.o matchimage.o largeimage.o
 	$(CC) main.o image.o matchimage.o largeimage.o -o findwally.out

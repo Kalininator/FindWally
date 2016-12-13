@@ -38,7 +38,7 @@ double MatchImage::getScoreSquaredDifference()
 		}
 
 		//divide total by width*height, sicne this will be the same for all match images, the scores will still be usable for comparison
-		//total = total / (width*height);
+		total = total / (width*height);
 		//store it in map
 
 		scores["SquaredDifference"] = total;
