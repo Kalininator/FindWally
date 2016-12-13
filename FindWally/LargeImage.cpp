@@ -53,7 +53,7 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 	//print em
 	for (int i = 0; i < matches.size(); i++)
 	{
-		cout << "#" << i << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
+		cout << "#" << i + 1 << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
 	}
 }
 
@@ -102,7 +102,7 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 	//print em
 	for (int i = 0; i < matches.size(); i++)
 	{
-		cout << "#" << i << ":\t"<< matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreSquaredDifference() << endl;
+		cout << "#" << i + 1 << ":\t"<< matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreSquaredDifference() << endl;
 	}
 }
 
