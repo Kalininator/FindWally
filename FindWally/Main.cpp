@@ -9,16 +9,16 @@
 
 using namespace std;
 
-int getUserInt(int min, int max, string message, int default)
+int getUserInt(int min, int max, string message, int defaultValue)
 {
 	string line;
 	int val;
-	cout << message << " (" << default << "):";
+	cout << message << " (" << defaultValue << "):";
 	while (getline(cin, line))
 	{
 		if (line == "")
 		{
-			return default;
+			return defaultValue;
 		}
 		stringstream ss(line);
 		if (ss >> val)
@@ -28,23 +28,25 @@ int getUserInt(int min, int max, string message, int default)
 		}
 		cout << message;
 	}
+	return defaultValue;//this should never happen :/
 }
 
-string getUserString(string message, string default)
+string getUserString(string message, string defaultValue)
 {
 	string line;
 	string val;
-	cout << message << " (" << default << "):";
+	cout << message << " (" << defaultValue << "):";
 	while (getline(cin, line))
 	{
 		if (line == "")
 		{
-			return default;
+			return defaultValue;
 		}
 		
 		return line;
 		cout << message;
 	}
+	return defaultValue;//this should never happen :/
 }
 
 int main(int argc, char* argv[])
