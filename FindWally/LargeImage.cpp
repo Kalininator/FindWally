@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
+void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop, int threadCount)
 {
 	mutex imageMutex;
 	//create a function to be used by threads
@@ -19,17 +19,15 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 			int x = i % (image->width - templateImage->width);//calc x and y co-ords from index
 			int y = i / (image->width - templateImage->width);
 
-
 			MatchImage* match = new MatchImage(image,x,y,templateImage);//create a match image for the location
 
 			match->getScoreNormalisedCorrelation(templateImageMean);
-			lock_guard<mutex> lock(imageMutex);
+			lock_guard<mutex> lock(imageMutex);//lock the mutex for accessing the large image, unlocks when lock_guard leaves the scope
 			image->addMatchNNS(match,keepTop);
 
 		}
 	};
 
-	int threadCount = thread::hardware_concurrency();
 	vector<thread> threads(threadCount);
 	int length = (width - templateImage->width) * (height - templateImage->height);
 	const int grainsize = length / threadCount;//operations given to each thread
@@ -50,14 +48,10 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop)
 
 	//sort matches
 	sort(matches.begin(), matches.end(), [](MatchImage* lhs, MatchImage* rhs) {return lhs->getScoreNormalisedCorrelation() > rhs->getScoreNormalisedCorrelation(); });
-	//print em
-	for (int i = 0; i < matches.size(); i++)
-	{
-		cout << "#" << i + 1 << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
-	}
+	
 }
 
-void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
+void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop, int threadCount)
 {
 	mutex imageMutex;//used to lock access to the large image, so only one thread can access it at a time
 
@@ -78,7 +72,6 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 		}
 	};
 
-	int threadCount = thread::hardware_concurrency();//numbe rof threads to be used, set by hardware capabilities
 	vector<thread> threads(threadCount);//store the threads to be used
 	int length = (width - templateImage->width) * (height - templateImage->height);
 	const int grainsize = length / threadCount;//operations given to each thread
@@ -99,11 +92,7 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop)
 	//sort matches
 	//use custom function for comparison, so that the algorithm can sort by internal values of the MatchImages
 	sort(matches.begin(), matches.end(), [](MatchImage* lhs, MatchImage* rhs) {return lhs->getScoreSquaredDifference() < rhs->getScoreSquaredDifference(); });
-	//print em
-	for (int i = 0; i < matches.size(); i++)
-	{
-		cout << "#" << i + 1 << ":\t"<< matches[i]->x << "," << matches[i]->y << "\t" << matches[i]->getScoreSquaredDifference() << endl;
-	}
+	
 }
 
 void LargeImage::addMatchNNS(MatchImage * match, int topnum)
@@ -161,6 +150,43 @@ void LargeImage::addMatchSSD(MatchImage * match, int topnum)
 	}
 	else {
 		delete match;//match at lowestPosition is a better score, so discard the new match
+	}
+}
+
+void LargeImage::printMatchesSquaredDifference()
+{
+	//print em
+	cout << "Results:" << endl;
+	for (int i = 0; i < matches.size(); i++)
+	{
+		cout << "#" << i + 1 << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreSquaredDifference() << endl;
+	}
+}
+
+void LargeImage::printMatchesNormalisedCorrelation()
+{
+	//print em
+	cout << "Results:" << endl;
+	for (int i = 0; i < matches.size(); i++)
+	{
+		cout << "#" << i + 1 << ":\t" << matches[i]->x << "," << matches[i]->y << "\t\t" << matches[i]->getScoreNormalisedCorrelation() << endl;
+	}
+}
+
+void LargeImage::drawMatches()
+{
+	for (MatchImage* i : matches)
+	{
+		for (int y = i->y; y < i->y + i->height; y++)
+		{
+			setValue(i->x, y, 0);
+			setValue(i->x + i->width, y, 0);
+		}
+		for (int x = i->x; x < i->x + i->width; x++)
+		{
+			setValue(x, i->y, 0);
+			setValue(x, i->y + i->height, 0);
+		}
 	}
 }
 

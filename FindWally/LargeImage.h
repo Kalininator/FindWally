@@ -8,10 +8,13 @@
 class LargeImage : public Image {
 public:
 	LargeImage(int width, int height, std::string filename) : Image(width,height,filename) {}
-	void NNS_NormalisedCorrelation(Image* templateImage, int keepTop);
-	void NNS_SquaredDifference(Image * templateImage, int keepTop);
+	void NNS_NormalisedCorrelation(Image* templateImage, int keepTop, int threadCount);
+	void NNS_SquaredDifference(Image * templateImage, int keepTop, int threadCount);
 	void addMatchNNS(MatchImage* match, int topnum);
 	void addMatchSSD(MatchImage* match, int topnum);
+	void printMatchesSquaredDifference();
+	void printMatchesNormalisedCorrelation();
+	void drawMatches();
 	~LargeImage();
 private:
 	std::vector<MatchImage*> matches;

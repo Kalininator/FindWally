@@ -3,26 +3,103 @@
 #include "LargeImage.h"
 #include "MatchImage.h"
 #include <cstring>
+#include <sstream>
+#include <ctime>
+#include <thread>
 
 using namespace std;
+
+int getUserInt(int min, int max, string message, int default)
+{
+	string line;
+	int val;
+	cout << message << " (" << default << "):";
+	while (getline(cin, line))
+	{
+		if (line == "")
+		{
+			return default;
+		}
+		stringstream ss(line);
+		if (ss >> val)
+		{
+			if (val <= max && val >= min)
+				return val;
+		}
+		cout << message;
+	}
+}
+
+string getUserString(string message, string default)
+{
+	string line;
+	string val;
+	cout << message << " (" << default << "):";
+	while (getline(cin, line))
+	{
+		if (line == "")
+		{
+			return default;
+		}
+		
+		return line;
+		cout << message;
+	}
+}
+
 int main(int argc, char* argv[])
 {
-	bool normalisedCorrelation = false;
-	string sceneFile = "Cluttered_scene.txt";
-	string templateFile = "Wally_grey.txt";
-	////1024,768
-	////36,49
-	LargeImage * scene = new LargeImage(1024, 768, sceneFile);
-	Image* templateImage = new Image(36, 49, templateFile);
-	clock_t startTime = clock();
+	cout << "Leave input blank for default values" << endl;
+	//User input:
+	//get scene file
 
-	int topx = 5;
-	if(normalisedCorrelation)
-		scene->NNS_NormalisedCorrelation(templateImage,topx);
+	string scenefilename = getUserString("enter scene file name","Cluttered_scene.txt");
+	int scenewidth = getUserInt(0,INT_MAX,"enter width",1024);
+	int sceneheight = getUserInt(0, INT_MAX, "enter height", 768);
+	LargeImage * scene = new LargeImage(scenewidth, sceneheight, scenefilename);
+	
+	//get template file
+	string templatefilename = getUserString("enter template file name", "Wally_grey.txt");
+	int templatewidth = getUserInt(0, INT_MAX, "enter width", 36);
+	int templateheight = getUserInt(0, INT_MAX, "enter height", 49);
+	Image * templateImage = new Image(templatewidth, templateheight, templatefilename);
+
+	//choose NNS algorithm
+	bool normalisedCorrelation = getUserInt(1, 2, "Choose NNS Algorithm:\n [1] Normalised Correlation\n [2] Sum of Squared Differences\n", 1) == 1 ? true : false;
+
+	//choose how many top matches to keep
+	int topx = getUserInt(1,INT_MAX,"Get top x results",5);
+
+	//choose number oif threads to use
+	int numthreads = thread::hardware_concurrency();
+	stringstream threadsmessage;
+	threadsmessage << "Use x threads [1 - " << numthreads << "]";
+	numthreads = getUserInt(1, numthreads, threadsmessage.str(), numthreads);
+
+	//clock_t startTime = clock();
+
+	if (normalisedCorrelation)
+	{
+		scene->NNS_NormalisedCorrelation(templateImage,topx,numthreads);
+		scene->printMatchesNormalisedCorrelation();
+	}
 	else
-		scene->NNS_SquaredDifference(templateImage,topx);
+	{
+		scene->NNS_SquaredDifference(templateImage,topx, numthreads);
+		scene->printMatchesSquaredDifference();
+	}
 
-	cout << "Time Taken: " << float(clock() - startTime) / (double)CLOCKS_PER_SEC << endl;
+	//check if drawing matches on scene
+	bool drawResults = getUserInt(1, 2, "Draw results on scene?\n [1] Yes\n [2] No\n", 1) == 1 ? true : false;
+	if (drawResults)
+	{
+		scene->drawMatches();
+		scene->generatePGM("ResultsScene.pgm");
+		cout << "Scene with matches can be found at ResultsScene.pgm";
+	}
+		
+
+	//cout << "Time Taken: " << float(clock() - startTime) / (double)CLOCKS_PER_SEC << endl;
 	delete templateImage;
 	delete scene;
 	cin.get();

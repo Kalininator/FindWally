@@ -11,6 +11,7 @@ MatchImage::MatchImage(Image * source, int x, int y, Image* templateImage)
 	this->templateImage = templateImage;
 	allocArray();
 
+	//copy values from source image into this class
 	for (int i = 0; i < width; i++)
 	{
 		for (int j = 0; j < height; j++)
@@ -33,11 +34,11 @@ double MatchImage::getScoreSquaredDifference()
 			for (int j = 0; j < height; j++)
 			{
 				int difference = getValue(i, j) - templateImage->getValue(i,j);
-				total += difference * difference;
+				total += difference * difference; //don't need to use abs() on the difference, as it is being squared anyway
 			}
 		}
 
-		//divide total by width*height, sicne this will be the same for all match images, the scores will still be usable for comparison
+		//divide total by width*height, since this will be the same for all match images, the scores will still be usable for comparison
 		total = total / (width*height);
 		//store it in map
 
