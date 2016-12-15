@@ -1,13 +1,11 @@
-﻿  LargeImage.cpp
-  Main.cpp
-  MatchImage.cpp
-MatchImage.cpp(71): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
-MatchImage.cpp(73): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-MatchImage.cpp(74): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+﻿  MatchImage.cpp
+MatchImage.cpp(74): warning C4244: 'initializing': conversion from 'long' to 'float', possible loss of data
+MatchImage.cpp(76): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+MatchImage.cpp(77): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   Generating code
-  6 of 747 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+  17 of 747 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Release\FindWally.exe
   FindWally.vcxproj -> D:\Documents\GitHub\FindWally\x64\Release\FindWally.pdb (Full PDB)

@@ -5,6 +5,7 @@
 #include <mutex>
 #include <thread>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ void LargeImage::NNS_NormalisedCorrelation(Image * templateImage, int keepTop, i
 
 			match->getScoreNormalisedCorrelation(templateImageMean);
 			lock_guard<mutex> lock(imageMutex);//lock the mutex for accessing the large image, unlocks when lock_guard leaves the scope
-			image->addMatchNNS(match,keepTop);
+			image->addMatchNC(match,keepTop);
 
 		}
 	};
@@ -73,16 +74,21 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop, int t
 	};
 
 	vector<thread> threads(threadCount);//store the threads to be used
-	int length = (width - templateImage->width) * (height - templateImage->height);
-	const int grainsize = length / threadCount;//operations given to each thread
+	//calculate how many total match images will be created
+	int length = (width - templateImage->width) * (height - templateImage->height); 
+	//calculate how many operations are given to each thread
+	const int grainsize = length / threadCount;
 
-	int worker_iter = 0;
-
+	int worker_iter = 0;//start position of current thread
 	for (int i = 0; i < threadCount - 1; i++)//all threads apart from last one
 	{
+		//start a thread, given its appropriate section
 		threads[i] = thread(worker, worker_iter, worker_iter + grainsize, this, templateImage, std::ref(imageMutex), keepTop);
-		worker_iter += grainsize;
+		worker_iter += grainsize;//move start position for the next thread
 	}
+	//start last thread
+	//the last thread's end position is the last value, so that any leftover matches are also calculated
+	//this is necessary if the number of matches is not divisible by the number of threads being used
 	threads.back() = thread(worker, worker_iter, length, this, templateImage, std::ref(imageMutex), keepTop);//last grainsize section, + any leftovers
 
 	for (auto&& i : threads)//wait for all threads to finish
@@ -95,7 +101,7 @@ void LargeImage::NNS_SquaredDifference(Image * templateImage, int keepTop, int t
 	
 }
 
-void LargeImage::addMatchNNS(MatchImage * match, int topnum)
+void LargeImage::addMatchNC(MatchImage * match, int topnum)
 {
 	if (matches.size() < topnum) //check if top x values has x values yet
 	{
@@ -189,6 +195,7 @@ void LargeImage::drawMatches()
 		}
 	}
 }
+
 
 
 

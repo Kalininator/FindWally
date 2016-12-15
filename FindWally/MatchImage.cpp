@@ -29,12 +29,13 @@ double MatchImage::getScoreSquaredDifference()
 		//if doesn't already have it calculated
 		//calculate sum of squared Differences
 		double total = 0;
-		for (int i = 0; i < width; i++)
+		for (int i = 0; i < width; i++)//for each position in the match image
 		{
 			for (int j = 0; j < height; j++)
 			{
+				//calculate the difference between the 2 values
 				int difference = getValue(i, j) - templateImage->getValue(i,j);
-				total += difference * difference; //don't need to use abs() on the difference, as it is being squared anyway
+				total += difference * difference;
 			}
 		}
 
@@ -69,6 +70,7 @@ double MatchImage::getScoreNormalisedCorrelation(double templateImageMean)
 
 		double score;
 
+		//calculates the average value in the scene
 		float mean_scene = getTotal() / (width * height);
 
 		Image* I = *this - mean_scene;
